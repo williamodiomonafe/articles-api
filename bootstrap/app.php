@@ -81,6 +81,7 @@ $app->singleton(
 // $app->register(App\Providers\EventServiceProvider::class);
  $app->register(App\Providers\RepositoryServiceProvider::class);
 
+
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
