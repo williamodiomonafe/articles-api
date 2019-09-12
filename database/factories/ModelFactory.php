@@ -17,3 +17,14 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'email' => $faker->email,
     ];
 });
+
+$factory->define(App\Article::class, function (Faker\Generator $faker) {
+    return [
+        'user_id' => random_int(1,3),
+        'title' => $faker->sentence,
+        'body' => $faker->paragraph,
+        'published' => random_int(0,1),
+    ];
+});
+
+

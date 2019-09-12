@@ -3,19 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Repositories\ArticleRepository;
+use App\Repositories\Interfaces\ArticleRepositoryInterface;
 use App\Article;
 
 class ArticleController extends Controller
 {
+
+    private $articleRepository;
+
     /**
-     * Create a new controller instance.
-     *
-     * @return void
+     * ArticleController constructor.
+     * @param ArticleRepositoryInterface $articleRepository
      */
-    public function __construct(ArticleRepository $articles)
+    public function __construct(ArticleRepositoryInterface $articleRepository)
     {
-        $this->article = $articles;
+        $this->articleRepository = $articleRepository;
     }
 
 
@@ -25,7 +27,7 @@ class ArticleController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function index() {
-        $article['data'] = Article::all();
+        $article['data'] = $this->articleRepository->getAll();
 
         return response()->json($article, 200);
     }
