@@ -9,7 +9,8 @@
 use App\Article;
 use Faker\Factory;
 
-class ArticleTest extends TestCase {
+class ArticleTest extends TestCase
+{
 
     /**
      * @test
@@ -17,7 +18,8 @@ class ArticleTest extends TestCase {
      * @endpoint /articles
      * @method POST
      */
-    public function canCreateAnArticle() {
+    public function canCreateAnArticle()
+    {
         // GIVEN
             // authentication passed
 
@@ -43,7 +45,8 @@ class ArticleTest extends TestCase {
      * @method GET
      *
      */
-    public function canGetAnArticle() {
+    public function canGetAnArticle()
+    {
         // GIVEN
 
         // WHEN
@@ -67,7 +70,8 @@ class ArticleTest extends TestCase {
      * @endpoint /articles
      * @method GET
      */
-    public function canGetAllArticles() {
+    public function canGetAllArticles()
+    {
         // GIVEN
 
         // WHEN
@@ -95,7 +99,8 @@ class ArticleTest extends TestCase {
      * @method PUT
      * endpoint /article/{id}
      */
-    public function canUpdateAnArticle() {
+    public function canUpdateAnArticle()
+    {
         // GIVEN
 
         // WHEN
@@ -117,7 +122,8 @@ class ArticleTest extends TestCase {
      * @method DELETE
      * @endpoint /articles/{id}
      */
-    public function canDeleteAnArticle() {
+    public function canDeleteAnArticle()
+    {
         // GIVEN
 
 
@@ -126,6 +132,28 @@ class ArticleTest extends TestCase {
 
         // THEN
         $response->assertResponseStatus(410);
+    }
+
+
+    public function canSearchForAnArticle()
+    {
+        // GIVEN
+
+        // WHEN
+        $response = $this->get('/articles/search', [
+            'title' => 'Hello',
+        ]);
+
+
+        // THEN
+        $response->assertResponseStatus(200);
+        $response->seeJsonStructure([
+            'user_id',
+            'title',
+            'body',
+            'published',
+            'created_at',
+        ]);
     }
 
 }

@@ -56,5 +56,13 @@
          * @return mixed
          */
         public function delete($id);
+
+
+        /**
+         * @param $title
+         * @return mixed
+         */
+        public function search($title);
+
     }
 

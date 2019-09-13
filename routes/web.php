@@ -15,6 +15,8 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+$router->get('/articles/search/{title}', 'ArticleController@search');
+
 $router->get('/articles', 'ArticleController@index');
 
 $router->get('/articles/{id}', 'ArticleController@show');

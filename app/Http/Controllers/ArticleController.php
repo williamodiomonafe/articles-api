@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Repositories\ArticleRepository;
-use App\Article;
-use App\Http\Requests\StoreArticleRequest;
 
 class ArticleController extends Controller
 {
@@ -27,7 +25,8 @@ class ArticleController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index() {
+    public function index()
+    {
         $article['data'] = $this->articleRepository->getAll();
         return response()->json($article, 200);
     }
@@ -39,20 +38,35 @@ class ArticleController extends Controller
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show($id) {
-        $article = $this->articleRepository->getOne($id);
-        return response()->json($article, 200);
+    public function show($id)
+    {
+        try {
+            $article = $this->articleRepository->getOne($id);
+
+            return response()->json($article, 200);
+        }
+        catch(\Exception $ex)
+        {
+            return response()->json(['error' => $ex->getMessage()], 501);
+        }
     }
 
 
     /**
      * Stores an article into the ArticleRepository
      *
-     * @param StoreArticleRequest $request
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(StoreArticleRequest $request) {
-        $article = $this->articleRepository->create($request);
+    public function store(Request $request)
+    {
+        try {
+            $article = $this->articleRepository->create($request);
+        }
+        catch(\Exception $ex)
+        {
+            return response(["error" => $ex->getMessage()], 503);
+        }
         return response()->json($article, 201);
     }
 
@@ -60,13 +74,21 @@ class ArticleController extends Controller
     /**
      * Update an article in ArticleRepository
      *
-     * @param StoreArticleRequest $request
+     * @param Request $request
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(StoreArticleRequest $request, $id) {
-        $article = $this->articleRepository->update($request, $id);
-        return response()->json($article, 200);
+    public function update(Request $request, $id)
+    {
+        try {
+            $article = $this->articleRepository->update($request, $id);
+            return response()->json($article, 200);
+        }
+        catch(\Exception $ex)
+        {
+            return response()->json(['error' => $ex->getMessage()], 501);
+        }
+
     }
 
 
@@ -77,9 +99,37 @@ class ArticleController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function destroy($id) {
-        $this->articleRepository->delete($id);
-        return response()->json([], 410);
+    public function destroy($id)
+    {
+        try {
+            $this->articleRepository->delete($id);
+            return response()->json([], 410);
+        }
+        catch(\Exception $ex)
+        {
+            return response()->json(['error' => $ex->getMessage()], 501);
+        }
+
+    }
+
+
+    /**
+     * Search for articles by title
+     *
+     * @param $title
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function search($title)
+    {
+        try {
+            $article = $this->articleRepository->search($title);
+
+            return response()->json($article, 200);
+        }
+        catch(\Exception $ex)
+        {
+            return response()->json(['error' => $ex->getMessage()], 501);
+        }
     }
 
 
