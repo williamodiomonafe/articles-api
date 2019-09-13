@@ -59,10 +59,10 @@
 
 
         /**
-         * @param $title
+         * @param $request
          * @return mixed
          */
-        public function search($title);
+        public function search($request);
 
     }
 

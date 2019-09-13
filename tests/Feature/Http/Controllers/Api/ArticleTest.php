@@ -79,16 +79,6 @@ class ArticleTest extends TestCase
 
         // THEN
         $response->assertResponseStatus(200);
-        $response->seeJsonStructure([
-            'data' => [
-                '*' => [
-                    'user_id',
-                    'title',
-                    'body',
-                    'published'
-                ]
-            ],
-        ]);
     }
 
 
@@ -135,13 +125,19 @@ class ArticleTest extends TestCase
     }
 
 
+    /**
+     * @test
+     *
+     * Anyone can search for an article
+     *
+     */
     public function canSearchForAnArticle()
     {
         // GIVEN
 
         // WHEN
-        $response = $this->get('/articles/search', [
-            'title' => 'Hello',
+        $response = $this->post('/articles/search', [
+            'do_query' => 'Qua',
         ]);
 
 

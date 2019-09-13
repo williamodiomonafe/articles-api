@@ -27,7 +27,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $article['data'] = $this->articleRepository->getAll();
+        $article = $this->articleRepository->getAll();
         return response()->json($article, 200);
     }
 
@@ -61,6 +61,12 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
         try {
+            $this->validate($request, [
+                'user_id' => 'required|numeric',
+                'title' => 'required|min:10|max:100',
+                'body' => 'required',
+            ]);
+
             $article = $this->articleRepository->create($request);
         }
         catch(\Exception $ex)
@@ -116,13 +122,13 @@ class ArticleController extends Controller
     /**
      * Search for articles by title
      *
-     * @param $title
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function search($title)
+    public function search(Request $request)
     {
         try {
-            $article = $this->articleRepository->search($title);
+            $article = $this->articleRepository->search($request);
 
             return response()->json($article, 200);
         }

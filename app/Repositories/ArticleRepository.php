@@ -18,12 +18,6 @@
 
         public function create($request)
         {
-            $this->validate($request, [
-                'user_id' => 'required|numeric',
-                'title' => 'required|alphanumeric|min:10|max:100',
-                'body' => 'required',
-            ]);
-
             $data = [
                 'user_id' => $request->user_id,
                 'title' => $request->title,
@@ -77,12 +71,6 @@
             // Get an article
             $article = Article::findOrFail($id);
 
-            // Set new article values
-//                $article->user_id = $request->user_id;
-//                $article->title = $request->title;
-//                $article->body = $request->body;
-//                $article->published = $request->published;
-
             $data = [
                 'user_id' => $request->user_id,
                 'title' => $request->title,
@@ -112,10 +100,12 @@
 
 
         // TODO: Implement search() method.
-        public function search($title)
+        public function search($request)
         {
-            $title = '%' . $title . '%';
-            $articles = Article::where('title', 'LIKE', $title)->get();
+            $query = '%' . $request->do_query . '%';
+            $articles = Article::where('title', 'LIKE', $query)
+                                ->orWhere('body', 'LIKE', $query)
+                                ->get();
             return $articles;
         }
 
