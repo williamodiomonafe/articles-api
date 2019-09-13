@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Repositories\Interfaces\ArticleRepositoryInterface;
+use App\Repositories\ArticleRepository;
 use App\Article;
+use App\Http\Requests\StoreArticleRequest;
 
 class ArticleController extends Controller
 {
@@ -13,97 +14,71 @@ class ArticleController extends Controller
 
     /**
      * ArticleController constructor.
-     * @param ArticleRepositoryInterface $articleRepository
+     * @param ArticleRepository $articleRepository
      */
-    public function __construct(ArticleRepositoryInterface $articleRepository)
+    public function __construct(ArticleRepository $articleRepository)
     {
         $this->articleRepository = $articleRepository;
     }
 
 
     /**
-     * Fetch all articles from database
+     * Fetch all articles from ArticleRepository
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function index() {
         $article['data'] = $this->articleRepository->getAll();
-
         return response()->json($article, 200);
     }
 
 
     /**
-     * Fetch specific article from database
+     * Fetch specific article from ArticleRepository
      *
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function show($id) {
-        try {
-            $article['data'] = Article::findOrFail($id);
-        } catch(\Exception $ex) {
-            return response()->json(['error' => $ex->getMessage()], 501);
-        }
-
+        $article = $this->articleRepository->getOne($id);
         return response()->json($article, 200);
     }
 
 
     /**
-     * @param Request $request
+     * Stores an article into the ArticleRepository
+     *
+     * @param StoreArticleRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request) {
-        $data = [
-            'user_id' => $request->input('user_id'),
-            'title' => $request->input('title'),
-            'body' => $request->input('body'),
-            'published' => $request->input('published'),
-        ];
-
-        try {
-            Article::create($data);
-        } catch(\Exception $ex) {
-            return response(["error" => $ex->getMessage()], 503);
-        }
-
-        return response()->json([], 201);
+    public function store(StoreArticleRequest $request) {
+        $article = $this->articleRepository->create($request);
+        return response()->json($article, 201);
     }
 
 
     /**
-     * @param Request $request
+     * Update an article in ArticleRepository
+     *
+     * @param StoreArticleRequest $request
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id) {
-        try {
-            $article = Article::findOrFail($id);
-            $article->title = $request->input('title');
-            $article->body = $request->input('body');
-            $article->published = $request->input('published');
-
-            $article->update();
-        } catch(\Exception $ex) {
-            return response()->json(['error' => $ex->getMessage()], 501);
-        }
-
-        return response()->json([], 200);
+    public function update(StoreArticleRequest $request, $id) {
+        $article = $this->articleRepository->update($request, $id);
+        return response()->json($article, 200);
     }
 
 
     /**
+     * Delete an article from ArticleRepository
+     *
      * @param $id
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function destroy($id) {
-        try {
-            Article::destroy($id);
-        } catch(\Exception $ex) {
-            return response()->json(['error' => $ex->getMessage()], 501);
-        }
-
+        $this->articleRepository->delete($id);
         return response()->json([], 410);
     }
 

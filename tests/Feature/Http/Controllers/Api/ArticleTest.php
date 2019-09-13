@@ -52,12 +52,10 @@ class ArticleTest extends TestCase {
         // THEN
         $response->assertResponseStatus(200);
         $response->seeJsonStructure([
-            'data' => [
-                'user_id',
-                'title',
-                'body',
-                'published'
-            ],
+            'user_id',
+            'title',
+            'body',
+            'published'
         ]);
     }
 
