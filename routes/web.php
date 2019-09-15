@@ -15,15 +15,30 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+// Authentication endpoint
+$router->post('auth/login', 'AuthController@authenticate');
+
+// Article rating endpoint
+$router->post('articles/{id}/rating', 'RatingController@store');
+
+// Article search endpoint
 $router->post('/articles/search', 'ArticleController@search');
 
+// List all articles endpoint
 $router->get('/articles', 'ArticleController@index');
 
+// Get an article endpoint
 $router->get('/articles/{id}', 'ArticleController@show');
 
-$router->post('/articles', 'ArticleController@store');
 
-$router->put('/articles/{id}', 'ArticleController@update');
+/**
+ * Protected routes using jwt.auth middleware
+ */
+$router->group(['middleware' => 'jwt.auth'], function () use ($router) {
+    $router->put('/articles/{id}', 'ArticleController@update');
 
-$router->delete('/articles/{id}', 'ArticleController@destroy');
+    $router->post('/articles', 'ArticleController@store');
+
+    $router->delete('/articles/{id}', 'ArticleController@destroy');
+});
 

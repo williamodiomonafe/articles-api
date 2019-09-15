@@ -9,9 +9,8 @@
     {
 
         /**
-         * Implement create() method of the Interface
+         * Create an article via create() method of the Interface
          *
-         * Create an article
          * @param $request
          * @return mixed
          */
@@ -32,12 +31,11 @@
 
 
         /**
-         * Implement getAll() method of the Interface
+         * Get all articles via list() method of the Interface
          *
-         * Get all articles
          * @return array
          */
-        public function getAll()
+        public function list()
         {
             // Get all articles and return data
             return Article::paginate(5);
@@ -45,23 +43,24 @@
 
 
         /**
-         * TODO: Implement get() method of the Interface
+         * Get an article via getOne() method of the Interface
          *
-         * Get an article
          * @param $id
          * @return mixed
          */
-        public function getOne($id)
+        public function get($id)
         {
             // Get article using id and return data
-            return Article::findorFail($id);
+            $article = Article::findorFail($id);
+            $article['ratings'] = $article->ratings()->get();
+            $article['average_rating'] = number_format($article->ratings()->average('rating'), 1);
+            return $article;
         }
 
 
         /**
-         * TODO: Implements update() method of the Interface
+         * Updates an Article Implements via update() method of Interface
          *
-         * Updates an Article
          * @param $request
          * @param $id
          * @return mixed
@@ -85,7 +84,7 @@
 
 
         /**
-         * TODO: Implement delete() method.
+         * Delete an article  via delete() method of the Interface
          *
          * @param id
          * @return bool|mixed|null
@@ -98,8 +97,12 @@
             return $article->delete();
         }
 
-
-        // TODO: Implement search() method.
+        /**
+         * Search for an article via search() method of the Interface
+         *
+         * @param $request
+         * @return mixed
+         */
         public function search($request)
         {
             $query = '%' . $request->do_query . '%';

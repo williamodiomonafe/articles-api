@@ -2,16 +2,10 @@
 
 namespace App;
 
-use Illuminate\Auth\Authenticatable;
-use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
-class Article extends Model implements AuthenticatableContract, AuthorizableContract
+class Article extends Model
 {
-    use Authenticatable, Authorizable;
-
     /**
      * The attributes that are guarded against mass assignment.
      *
@@ -20,4 +14,8 @@ class Article extends Model implements AuthenticatableContract, AuthorizableCont
     protected $guarded = [
         'id',
     ];
+
+    public function ratings() {
+        return $this->hasMany('App\Rating');
+    }
 }

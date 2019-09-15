@@ -11,13 +11,22 @@
 |
 */
 
+/**
+ * Create User Factory/Seed Data
+ */
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->email,
+        'password' => password_hash('password', PASSWORD_BCRYPT),
     ];
 });
 
+
+
+/**
+ * Create Articles Factory/Seed Data
+ */
 $factory->define(App\Article::class, function (Faker\Generator $faker) {
     return [
         'user_id' => random_int(1,3),

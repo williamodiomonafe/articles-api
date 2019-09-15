@@ -4,6 +4,10 @@ namespace App\Providers;
 
 use App\Repositories\ArticleRepository;
 use App\Repositories\Interfaces\ArticleRepositoryInterface;
+
+use App\Repositories\RatingRepository;
+use App\Repositories\Interfaces\RatingRepositoryInterface;
+
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -18,6 +22,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             ArticleRepositoryInterface::class,
             ArticleRepository::class
+        );
+
+        $this->app->bind(
+            RatingRepositoryInterface::class,
+            RatingRepository::class
         );
     }
 }

@@ -21,13 +21,13 @@ class ArticleController extends Controller
 
 
     /**
-     * Fetch all articles from ArticleRepository
+     * List all articles from ArticleRepository
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        $article = $this->articleRepository->getAll();
+        $article = $this->articleRepository->list();
         return response()->json($article, 200);
     }
 
@@ -41,13 +41,13 @@ class ArticleController extends Controller
     public function show($id)
     {
         try {
-            $article = $this->articleRepository->getOne($id);
+            $article = $this->articleRepository->get($id);
 
             return response()->json($article, 200);
         }
         catch(\Exception $ex)
         {
-            return response()->json(['error' => $ex->getMessage()], 501);
+            return response()->json(['error' => 'No result returned or Bad Request'], 400);
         }
     }
 
@@ -71,7 +71,7 @@ class ArticleController extends Controller
         }
         catch(\Exception $ex)
         {
-            return response(["error" => $ex->getMessage()], 503);
+            return response(["error" => 'No result returned or Bad Request'], 503);
         }
         return response()->json($article, 201);
     }
@@ -92,7 +92,7 @@ class ArticleController extends Controller
         }
         catch(\Exception $ex)
         {
-            return response()->json(['error' => $ex->getMessage()], 501);
+            return response()->json(['error' => 'No result returned or Bad Request'], 400);
         }
 
     }
@@ -113,7 +113,7 @@ class ArticleController extends Controller
         }
         catch(\Exception $ex)
         {
-            return response()->json(['error' => $ex->getMessage()], 501);
+            return response()->json(['error' => 'No result returned or Bad Request'], 400);
         }
 
     }
@@ -134,7 +134,7 @@ class ArticleController extends Controller
         }
         catch(\Exception $ex)
         {
-            return response()->json(['error' => $ex->getMessage()], 501);
+            return response()->json(['error' => 'No result returned or Bad Request'], 400);
         }
     }
 

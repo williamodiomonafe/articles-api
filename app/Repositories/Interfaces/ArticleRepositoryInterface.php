@@ -28,7 +28,7 @@
          *
          * @return mixed
          */
-        public function getAll();
+        public function list();
 
 
         /**
@@ -37,7 +37,7 @@
          * @param $id
          * @return mixed
          */
-        public function getOne($id);
+        public function get($id);
 
         /**
          * Update an article method

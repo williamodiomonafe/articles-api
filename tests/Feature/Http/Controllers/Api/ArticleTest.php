@@ -21,8 +21,6 @@ class ArticleTest extends TestCase
     public function canCreateAnArticle()
     {
         // GIVEN
-            // authentication passed
-
 
         // WHEN
         $response = $this->post('/articles', [
@@ -45,7 +43,7 @@ class ArticleTest extends TestCase
      * @method GET
      *
      */
-    public function canGetAnArticle()
+    public function canGetAnArticleAndCanSeeRating()
     {
         // GIVEN
 
@@ -58,7 +56,8 @@ class ArticleTest extends TestCase
             'user_id',
             'title',
             'body',
-            'published'
+            'published',
+            'ratings',
         ]);
     }
 
@@ -129,7 +128,8 @@ class ArticleTest extends TestCase
      * @test
      *
      * Anyone can search for an article
-     *
+     * @method POST
+     * @endpoint /articles/search
      */
     public function canSearchForAnArticle()
     {
@@ -137,19 +137,20 @@ class ArticleTest extends TestCase
 
         // WHEN
         $response = $this->post('/articles/search', [
-            'do_query' => 'Qua',
+            'do_query' => 'a',
         ]);
 
 
         // THEN
         $response->assertResponseStatus(200);
         $response->seeJsonStructure([
-            'user_id',
-            'title',
-            'body',
-            'published',
-            'created_at',
+            [
+                'user_id',
+                'title',
+                'body',
+                'published',
+                'created_at',
+            ]
         ]);
     }
-
 }
