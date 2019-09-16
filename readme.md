@@ -27,7 +27,7 @@ NOTE: Some secured endpoints tests may fail
 
 
 ## Documentation
-- [View API Documentation][https://documenter.getpostman.com/view/4646057/SVmtzzvK]
+- https://documenter.getpostman.com/view/4646057/SVmtzzvK
 
 
 #### Endpoints
