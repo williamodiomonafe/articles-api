@@ -20,7 +20,8 @@ class JwtMiddleware
     public function handle($request, Closure $next, $guard = null)
     {
 
-        $token = $request->get('token');
+//        $token = $request->get('token');
+        $token = $request->headers->get('token') ? $request->headers->get('token') : $request->get('token');
 
         /**
          * If authentication is not passed or provided and token is thus not supplied

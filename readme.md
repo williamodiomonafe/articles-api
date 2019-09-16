@@ -35,7 +35,8 @@ NOTE: Some secured endpoints tests may fail
 Create an article (Secured)
 [POST] /articles
 
-Keys: {title} string, {body} string, {published} boolean, {token} string
+Keys: {title} string, {body} string, {published} boolean
+Token can be passed as a {key} POST value or as Header values 
 
 List all articles
 [GET] /articles
@@ -136,11 +137,3 @@ API routes includes :
 ```bash
 $ docker-compose run --rm --no-deps articulate-api php artisan route:list --path=api
 ```
-
-[- [View API Documentation](https://laravel.com/docs/6.0/testing)]: https://laravel.com/docs/6.0/testing
-
-[https://documenter.getpostman.com/view/4646057/SVmtzzvK]: https://laravel.com/docs/6.0/testing
-
-[]: https://documenter.getpostman.com/view/4646057/SVmtzzvK
-
-[https://documenter.getpostman.com/view/4646057/SVmtzzvK]: https://documenter.getpostman.com/view/4646057/SVmtzzvK
