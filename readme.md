@@ -44,11 +44,11 @@ Get an Article
 [GET] /articles/{id}
 URL Parameter: {id} numeric
 
-Delete an Article
+Delete an Article (Secured)
 [DELETE] /articles/{id}
 URL Parameter: {id} numeric
 
-Update an Article
+Update an Article (Secured)
 [PUT] /articles/{id}
 URL Parameter: {id} numeric
 Key: {title} string, {body} string, {published} string, {token} string
