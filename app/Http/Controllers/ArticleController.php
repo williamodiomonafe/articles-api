@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Repositories\ArticleRepository;
+use Illuminate\Support\Facades\Auth;
+use Firebase\JWT\JWT;
 
 class ArticleController extends Controller
 {
@@ -62,8 +64,7 @@ class ArticleController extends Controller
     {
         try {
             $this->validate($request, [
-                'user_id' => 'required|numeric',
-                'title' => 'required|min:10|max:100',
+                'title' => 'required|min:5|max:100',
                 'body' => 'required',
             ]);
 
@@ -71,7 +72,7 @@ class ArticleController extends Controller
         }
         catch(\Exception $ex)
         {
-            return response(["error" => 'No result returned or Bad Request'], 503);
+            return response(["error" => $ex->getMessage()], 503);
         }
         return response()->json($article, 201);
     }

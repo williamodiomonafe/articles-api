@@ -17,7 +17,48 @@ In this app, the following were implemented
 - [Testing](https://laravel.com/docs/6.0/testing)
 
 ## Installation
+### Via Local Server
+- Clone app from the git repo into your web server
+- Run "php artisan migrate" command to run all migrations
+- Optionally, you can import seed data by running this command "php artisan db:seed"
+- Run tests via command /vendor/bin/phpunit. 
+NOTE: Some secured endpoints tests may fail
+- Use POSTMAN or any other RESTful Client to send CRUD requests via the endpoints specified below.
 
+
+#### Endpoints
+```yml
+Create an article (Secured)
+[POST] /articles
+
+Keys: {title} string, {body} string, {published} boolean, {token} string
+
+List all articles
+[GET] /articles
+
+Get an Article
+[GET] /articles/{id}
+URL Parameter: {id} numeric
+
+Delete an Article
+[DELETE] /articles/{id}
+URL Parameter: {id} numeric
+
+Update an Article
+[PUT] /articles/{id}
+URL Parameter: {id} numeric
+Key: {title} string, {body} string, {published} string, {token} string
+
+Post Rating
+[POST] /articles/{id}/rating
+URL Parameter: {id}
+Key: {rating} numeric between 1 -10
+```
+
+
+
+
+### Using Docker
 Development environment requirements :
 - [Docker](https://www.docker.com)
 - [Docker Compose](https://docs.docker.com/compose/install/)
@@ -25,13 +66,10 @@ Development environment requirements :
 Setting up your development environment on your local machine :
 ```bash
 $ git clone https://github.com/williamodiomonafe/articulate-api.git
-$ cd articulate
+$ cd articulate-api
 $ cp .env.example .env
-$ docker-compose run --rm --no-deps articulate-api composer install
+$ docker-compose run --rm --no-deps articulate-api composer update
 $ docker-compose run --rm --no-deps articulate-api php artisan key:generate
-$ docker-compose run --rm --no-deps articulate-api php artisan horizon:install
-$ docker-compose run --rm --no-deps articulate-api php artisan telescope:install
-$ docker-compose run --rm --no-deps articulate-api php artisan storage:link
 $ docker run --rm -it -v $(pwd):/app -w /app node yarn
 $ docker-compose up -d
 ```
@@ -69,20 +107,9 @@ Running php-cs-fixer :
 $ docker-compose run --rm --no-deps articulate-api ./vendor/bin/php-cs-fixer fix --config=.php_cs --verbose --dry-run --diff
 ```
 
-Generating backup :
-```bash
-$ docker-compose run --rm articulate-api php artisan vendor:publish --provider="Spatie\Backup\BackupServiceProvider"
-$ docker-compose run --rm articulate-api php artisan backup:run
-```
-
 Generating fake data :
 ```bash
-$ docker-compose run --rm articulate-api php artisan db:seed --class=DevDatabaseSeeder
-```
-
-Discover package
-```bash
-$ docker-compose run --rm --no-deps articulate-api php artisan package:discover
+$ docker-compose run --rm articulate-api php artisan db:seed --class=ArticlesTableSeeder
 ```
 
 In development environnement, rebuild the database :
@@ -92,33 +119,16 @@ $ docker-compose run --rm articulate-api php artisan migrate:fresh --seed
 
 ## Accessing the API
 
-Clients can access to the REST API. API requests require authentication via token. You can create a new token in your user profile.
+Clients can access to the REST API. API requests to CREATE, UPDATE AND DELETE articles require authentication via token. You can create a new token upon successful login.
 
-Then, you can use this token either as url parameter or in Authorization header :
-
-```bash
-# Url parameter
-GET http://laravel-blog.app/api/v1/posts?api_token=your_private_token_here
-
-# Authorization Header
-curl --header "Authorization: Bearer your_private_token_here" http://laravel-blog.app/api/v1/posts
+```yml
+Create an article
+[POST] /articles/
 ```
 
-API are prefixed by ```api``` and the API version number like so ```v1```.
 
-Do not forget to set the ```X-Requested-With``` header to ```XMLHttpRequest```. Otherwise, Laravel won't recognize the call as an AJAX request.
-
-To list all the available routes for API :
+API routes includes :
 
 ```bash
 $ docker-compose run --rm --no-deps articulate-api php artisan route:list --path=api
 ```
-
-## Contributing
-
-Do not hesitate to contribute to the project by adapting or adding features ! Bug reports or pull requests are welcome.
-
-## License
-
-This project is released under the [MIT](http://opensource.org/licenses/MIT) license.
-

@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: lumen_articles_app
+    container_name: articles_api_app
     volumes:
       - ./storage:/var/www/storage
     env_file: '.env'
