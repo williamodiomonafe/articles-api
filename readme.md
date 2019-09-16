@@ -26,6 +26,10 @@ NOTE: Some secured endpoints tests may fail
 - Use POSTMAN or any other RESTful Client to send CRUD requests via the endpoints specified below.
 
 
+## Documentation
+- [View API Documentation][https://documenter.getpostman.com/view/4646057/SVmtzzvK]
+
+
 #### Endpoints
 ```yml
 Create an article (Secured)
@@ -132,3 +136,7 @@ API routes includes :
 ```bash
 $ docker-compose run --rm --no-deps articulate-api php artisan route:list --path=api
 ```
+
+[- [View API Documentation](https://laravel.com/docs/6.0/testing)]: https://laravel.com/docs/6.0/testing
+
+[https://documenter.getpostman.com/view/4646057/SVmtzzvK]: https://laravel.com/docs/6.0/testing
