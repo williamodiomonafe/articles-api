@@ -6,7 +6,6 @@
  * Time: 12:52 PM
  */
 
-use App\Article;
 use Faker\Factory;
 
 class ArticleTest extends TestCase
@@ -20,17 +19,14 @@ class ArticleTest extends TestCase
      */
     public function canCreateAnArticle()
     {
-        // GIVEN
-
-        // WHEN
+        $factory = Factory::create();
         $response = $this->post('/articles', [
-            'user_id' => 1,
-            'title' => 'Hello World',
-            'body' => 'Hello, you are welcome to my first ever published post on this test. Thank You',
-            'published' => 1,
+            'user_id' => random_int(1,5),
+            'title' => $factory->sentence,
+            'body' => $factory->paragraph,
+            'published' => random_int(0,1),
         ]);
 
-        // THEN
         $response->assertResponseStatus(201);
     }
 
@@ -43,14 +39,10 @@ class ArticleTest extends TestCase
      * @method GET
      *
      */
-    public function canGetAnArticleAndCanSeeRating()
+    public function canGetAnArticleAndSeeRating()
     {
-        // GIVEN
-
-        // WHEN
         $response = $this->get('/articles/1');
 
-        // THEN
         $response->assertResponseStatus(200);
         $response->seeJsonStructure([
             'user_id',
@@ -71,13 +63,34 @@ class ArticleTest extends TestCase
      */
     public function canGetAllArticles()
     {
-        // GIVEN
-
-        // WHEN
         $response = $this->get('/articles');
-
-        // THEN
         $response->assertResponseStatus(200);
+    }
+
+    /**
+     * @test
+     *
+     * Anyone can search for an article
+     * @method POST
+     * @endpoint /articles/search
+     */
+    public function canSearchForAnArticle()
+    {
+        $response = $this->post('/articles/search', [
+            'do_query' => 'a',
+        ]);
+
+
+        $response->assertResponseStatus(200);
+        $response->seeJsonStructure([
+            [
+                'user_id',
+                'title',
+                'body',
+                'published',
+                'created_at',
+            ]
+        ]);
     }
 
 
@@ -90,19 +103,16 @@ class ArticleTest extends TestCase
      */
     public function canUpdateAnArticle()
     {
-        // GIVEN
-
-        // WHEN
         $response = $this->put('/articles/1', [
             'user_id' => 1,
-            'title' => 'Hello My Favourite World',
-            'body' => 'I just updated the Hello World Article and unpublished it',
+            'title' => 'An update to my first article',
+            'body' => 'This is an update the the first article. Please read through',
             'published' => 0,
         ]);
 
-        // THEN
         $response->assertResponseStatus(200);
     }
+
 
     /**
      * @test
@@ -113,44 +123,7 @@ class ArticleTest extends TestCase
      */
     public function canDeleteAnArticle()
     {
-        // GIVEN
-
-
-        // WHEN
         $response = $this->delete('/articles/1');
-
-        // THEN
         $response->assertResponseStatus(410);
-    }
-
-
-    /**
-     * @test
-     *
-     * Anyone can search for an article
-     * @method POST
-     * @endpoint /articles/search
-     */
-    public function canSearchForAnArticle()
-    {
-        // GIVEN
-
-        // WHEN
-        $response = $this->post('/articles/search', [
-            'do_query' => 'a',
-        ]);
-
-
-        // THEN
-        $response->assertResponseStatus(200);
-        $response->seeJsonStructure([
-            [
-                'user_id',
-                'title',
-                'body',
-                'published',
-                'created_at',
-            ]
-        ]);
     }
 }

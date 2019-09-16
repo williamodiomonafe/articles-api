@@ -52,8 +52,14 @@
         {
             // Get article using id and return data
             $article = Article::findorFail($id);
-            $article['ratings'] = $article->ratings()->get();
-            $article['average_rating'] = number_format($article->ratings()->average('rating'), 1);
+
+            if($ratings = $article->ratings()->get()) {
+                $article['ratings'] = $ratings;
+                $article['average_rating'] = number_format($article->ratings()->average('rating'), 1);
+            } else {
+                $article['ratings'] = 'No ratings yet.';
+            }
+
             return $article;
         }
 

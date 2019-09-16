@@ -16,6 +16,8 @@ $router->get('/', function () use ($router) {
 });
 
 // Authentication endpoint
+$router->post('auth/register', 'AuthController@store');
+
 $router->post('auth/login', 'AuthController@authenticate');
 
 // Article rating endpoint
@@ -30,15 +32,10 @@ $router->get('/articles', 'ArticleController@index');
 // Get an article endpoint
 $router->get('/articles/{id}', 'ArticleController@show');
 
-
-/**
- * Protected routes using jwt.auth middleware
- */
-$router->group(['middleware' => 'jwt.auth'], function () use ($router) {
+$router->group(['middleware' => 'jwt.auth'], function() use ($router) {
     $router->put('/articles/{id}', 'ArticleController@update');
 
     $router->post('/articles', 'ArticleController@store');
 
     $router->delete('/articles/{id}', 'ArticleController@destroy');
 });
-

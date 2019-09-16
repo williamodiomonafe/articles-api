@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\UserRepository;
 use Faker\Provider\Base;
 use Validator;
 use App\User;
@@ -18,15 +19,42 @@ class AuthController extends BaseController
      * @var \Illuminate\Http\Request
      */
     private $request;
+    private $userRepository;
 
     /**
      * AuthController constructor.
      * @param Request $request
+     * @param UserRepository $userRepository
      */
-    public function __construct(Request $request)
+    public function __construct(Request $request, UserRepository $userRepository)
     {
         $this->request = $request;
+        $this->userRepository = $userRepository;
     }
+
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store()
+    {
+        try
+        {
+            $check_user = User::where('email', $this->request->email)->first();
+            if($check_user)
+            {
+                return response()->json(['error' => 'A user with email {' . $this->request->email . '} already exist'], 400);
+            }
+
+            $user = $this->userRepository->create($this->request);
+            return response()->json($user, 201);
+        }
+        catch(\Exception$ex)
+        {
+            return response()->json(['error' => $ex->getMessage()], 400);
+        }
+    }
+
 
 
     /**
