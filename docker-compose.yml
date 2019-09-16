@@ -6,46 +6,42 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: official/php
-    container_name: app
-    restart: unless-stopped
-    tty: true
+    container_name: lumen_articles_app
+    volumes:
+      - ./storage:/var/www/storage
+    env_file: '.env'
     environment:
-      SERVICE_NAME: app
-      SERVICE_TAGS: dev
-    working_dir: /var/www
-    networks:
-      - app-network
+      - "DB_HOST=database"
 
-  #Apache Service
-  webserver:
-    image: apache:latest
-    container_name: webserver
-    restart: unless-stopped
-    tty: true
+  #Web Server
+  web:
+    container_name: nginx_server
+    build:
+      context: ./
+      dockerfile: Dockerfile
     ports:
-      - "80:80"
-      - "443:443"
-    networks:
-      - app-network
+      - "8990:80"
+    volumes:
+      - ./storage/logs/:/var/log/nginx
 
-  #MySQL Service
-  db:
-    image: mysql:5.7.22
-    container_name: db
-    restart: unless-stopped
-    tty: true
+  #Database
+  database:
+    image: mysql:5.7
+    container_name: mysql_database
     ports:
-      - "3306:3306"
+      - "8991:3306"
     environment:
       MYSQL_DATABASE: articulate
-      MYSQL_ROOT_PASSWORD: secret_pw
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
-    networks:
-      - app-network
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - dbdata:/var/lib/mysql
 
 #Docker Networks
 networks:
   app-network:
     driver: bridge
+
+#Named Volumes
+volumes:
+    dbdata:

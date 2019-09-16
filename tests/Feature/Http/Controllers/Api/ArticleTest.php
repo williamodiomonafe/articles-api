@@ -7,9 +7,12 @@
  */
 
 use Faker\Factory;
+use App\User;
 
 class ArticleTest extends TestCase
 {
+
+    protected $returnedUser;
 
     /**
      * @test
@@ -19,6 +22,13 @@ class ArticleTest extends TestCase
      */
     public function canCreateAnArticle()
     {
+    //     $returnedUser = $this->post('/auth/login', [
+    //         'email' => 'william@clane.com',
+    //         'password' => 'secret',
+    //     ]);
+
+    //     dd($returnedUser);
+
         $factory = Factory::create();
         $response = $this->post('/articles', [
             'user_id' => random_int(1,5),

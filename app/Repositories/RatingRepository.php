@@ -13,7 +13,7 @@ class RatingRepository implements RatingRepositoryInterface
     {
         $data = [
             'article_id' => $id,
-            'user_id' => $request->user_id,
+            'user_id' => (auth() != null) ? auth()->user->id : '',
             'rating' => $request->rating,
         ];
 

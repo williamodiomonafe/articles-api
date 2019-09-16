@@ -18,7 +18,7 @@
         public function create($request)
         {
             $data = [
-                'user_id' => $request->user_id,
+                'user_id' => auth()->user->id,
                 'title' => $request->title,
                 'body' => $request->body,
                 'published' => $request->published,
@@ -77,7 +77,7 @@
             $article = Article::findOrFail($id);
 
             $data = [
-                'user_id' => $request->user_id,
+                'user_id' => auth()->user->id,
                 'title' => $request->title,
                 'body' => $request->body,
                 'published' => $request->published,
